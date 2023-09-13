@@ -9,7 +9,7 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Using host:port localhost:54148 ...
+; Using host:port localhost:55496 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -35,45 +35,3 @@ nil
 cljs꞉user-activate꞉>  ; Use `alt+enter` to evaluate
 ; Jack-in done.
 cljs꞉user-activate꞉> 
-#'GameOfLife/board-to-string
-clj꞉GameOfLife꞉> 
-#'GameOfLife/string-to-board
-clj꞉GameOfLife꞉> 
-#'GameOfLife/neighbors-of
-clj꞉GameOfLife꞉> 
-#'GameOfLife/living-neighbors
-clj꞉GameOfLife꞉> 
-#'GameOfLife/will-live
-clj꞉GameOfLife꞉> 
-#'GameOfLife/next-gen
-clj꞉GameOfLife꞉> 
-#'GameOfLife/board-to-string
-clj꞉GameOfLife꞉> 
-#'GameOfLife/string-to-board
-clj꞉GameOfLife꞉> 
-"###\n-##"
-clj꞉GameOfLife꞉> 
-###
--##
-nil
-clj꞉GameOfLife꞉> 
-"#------------------\n-------------------\n-------------------\n-------------------\n-------------------\n--------#----------\n-------------------\n-------------#-----\n-------------------\n-------------------\n-------------------\n---------#------#-#\n-------------------\n-------------#-----"
-clj꞉GameOfLife꞉> 
-#{[0 0] [1 0] [2 0] [1 1] [2 1]}
-clj꞉GameOfLife꞉> 
-#{[1 1] [1 0] [1 -1] [0 1] [0 -1] [-1 1] [-1 0] [-1 -1]}
-clj꞉GameOfLife꞉> 
-2
-clj꞉GameOfLife꞉> 
-false
-clj꞉GameOfLife꞉> 
-true
-clj꞉GameOfLife꞉> 
-false
-clj꞉GameOfLife꞉> 
-true
-clj꞉GameOfLife꞉> 
-#{[1 2] [2 2] [1 1] [2 1]}
-clj꞉GameOfLife꞉> 
-#{[1 2] [2 3] [0 2] [1 1] [2 1]}
-clj꞉GameOfLife꞉> 
