@@ -2,7 +2,9 @@
   (:require [clojure.string :as st])
   (require [clojure.set :as s])
   (require [clojure.string :as st])
-  (require [clojure.test :refer :all]))
+  (require [clojure.test :refer :all])
+  (:require [quil.core :as q]
+            [quil.middleware :as m]))
 
 (defn neighbors-of [[x y]]
   (into #{}
