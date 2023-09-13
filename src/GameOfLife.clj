@@ -1,11 +1,16 @@
 (ns GameOfLife 
   (:require [clojure.set :refer :all])
-  (:require [clojure.test :refer :all]))
+  (:require [clojure.test :refer :all])
+  (:require [quil.core :as q]
+            [quil.middleware :as m]))
   
 
 (defn neighbors-of [[x y]]
   (into #{}
         (remove (fn [cell] (= [x y] cell)) (for [i [-1 0 1] j [-1 0 1]] [(- x i) (- y j)]))))
+
+(defn neighbors-of-memo [[x y]]
+  (memoize neighbors-of))
 
 (defn living-neighbors [[x y] living]
   (def neighbors (neighbors-of [x y]))
@@ -20,24 +25,6 @@
 (defn next-gen [living]
   (into #{} (filter (fn [n] (will-live n living))
                     (reduce clojure.set/union (into #{} (map neighbors-of living))))))
-
-(defn board-to-string [living]
-  (for [i [living]] (apply str i))
-  (clojure.string/join "\n" (let [minX (apply min (map first living))
-                                  maxX (apply max (map first living))
-                                  minY (apply min (map second living))
-                                  maxY (apply max (map second living))]
-                              (for [i (range minY (inc maxY))]
-                                (apply str (for [j (range minX (inc maxX))] (if (contains? living [j i]) "#" "-")))))))
-
-(defn string-to-board [board]
-  (into #{} (remove nil? (let [rows (clojure.string/split-lines board)]
-                           (for [i (range 0 (count rows))
-                                 j (range 0 (count (first rows)))] (if (= (nth (nth rows i) j) \#) [j i]))))))
-
-
-
-
 
 (defn tests [opts]
   (run-all-tests))
@@ -55,26 +42,21 @@
   (is (= #{[2 2] [2 3] [1 1]} 
          (next-gen #{[2 2] [3 3] [5 7] [1 2] [0 0]}))))
 
-(deftest TestStringtoBoard
-  (is (= "#-----\n------\n-##---\n---#--\n------\n------\n------\n-----#" 
-         (board-to-string #{[2 2] [3 3] [5 7] [1 2] [0 0]}))))
+(defn setup []
+  (q/frame-rate 20)                    
+  (q/background 200)
+  (into #{} (remove nil? (for [i (range 20) j (range 20)] (if (< (rand 1) 0.3) [i j])))))                 
+                                      
+(defn draw [state]
+  (q/background 255 255 255)
+  (doseq [i state] ((q/fill 0 0 0)(q/rect (* (first i) 10) (* (second i) 10) 10 10))))  
 
-(deftest TestBoardtoString
-  (is (= #{[2 2] [3 3] [5 7] [1 2] [0 0]} 
-         (string-to-board "#-----\n------\n-##---\n---#--\n------\n------\n------\n-----#"))))
+(q/defsketch example                 
+  :title "Conway Game Of Life"     
+  :setup #'setup                        
+  :draw #'draw                          
+  :size [1000 1000]
+  :update #'next-gen
+  :middleware [m/fun-mode])
 
-(board-to-string #{[0 0] [1 0] [2 0] [1 1] [2 1]})
-
-(println (board-to-string #{[0 0] [0 1] [1 0] [1 1] [-1 0]}))
-(board-to-string #{[0 1] [1 7] [8 7] [5 9] [10 7] [5 3] [-8 -4]})
-
-(string-to-board "###\n-##")
-
-(neighbors-of [0 0])
-(living-neighbors [0 0] #{[0 0] [0 1] [1 0]})
-(will-live [0 0] #{[0 0] [0 1] [1 0] [1 1] [-1 0]})
-(will-live [1 1] #{[1 2] [1 0] [0 1]})
-(will-live [1 1] #{[1 2] [1 0]})
-(will-live [1 1] #{[1 1] [1 0] [0 1]})
-(next-gen #{[1 1] [2 2] [2 1]})
-(next-gen #{[1 1] [1 2] [1 3] [2 1] [3 3]})
+(defn -main [opts])
